@@ -14,9 +14,9 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.ASSUME_ROLE_ARN }}
-          role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.ASSUME_ROLE_ARN }}
+          role-session-name: "GithubAction-Session"
       - name: Execute AWS CLI to
         run: |
           aws sts get-caller-identity
