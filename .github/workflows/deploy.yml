@@ -1,9 +1,6 @@
 # Sample workflow to access AWS resources when workflow is tied to branch
 name: AWS example workflow
 on: push
-env:
-  AWS_REGION: "ap-southeast-1"
-  ASSUME_ROLE_ARN: "arn:aws:iam::025066283834:role/GithubAction-BaseRole"
 # permission can be added at job level or workflow level
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -20,7 +17,6 @@ jobs:
           role-to-assume: ${{ env.ASSUME_ROLE_ARN }}
           role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
-      # Upload a file to AWS s3
       - name: Execute AWS CLI to
         run: |
           aws sts get-caller-identity
