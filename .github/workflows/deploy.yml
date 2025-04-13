@@ -14,8 +14,8 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: "${{ env.AWS_REGION }}"
-          role-to-assume: "${{ env.ASSUME_ROLE_ARN }}"
+          aws-region: "${{ vars.AWS_REGION }}"
+          role-to-assume: "${{ vars.ASSUME_ROLE_ARN }}"
           role-session-name: "GithubAction-Session"
       - name: Login to Amazon ECR
         id: ecr-login
@@ -23,14 +23,14 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: Force new deployment
         env:
-          ECS_CLUSTER_NAME: ${{ env.ECS_CLUSTER_NAME }}
-          ECS_SERVICE_NAME: ${{ env.ECS_SERVICE_NAME }}
+          ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+          ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
         run: |
           aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --force-new-deployment
