@@ -8,14 +8,14 @@ permissions:
 jobs:
   GetCallerIdentity:
     runs-on: ubuntu-latest
-    environment: "main"
+    environment: ${{ github.base_ref }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v4
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: "${{ secrets.AWS_REGION }}"
+          aws-region: "${{ vars.AWS_REGION }}"
           role-to-assume: "${{ vars.ASSUME_ROLE_ARN }}"
           role-session-name: "GithubAction-Session"
       - name: Login to Amazon ECR
