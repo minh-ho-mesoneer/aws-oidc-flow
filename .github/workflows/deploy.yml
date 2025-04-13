@@ -3,7 +3,6 @@ name: AWS example workflow
 on: push
 env:
   AWS_REGION: "ap-southeast-1"
-  ASSUME_ROLE_NAME: "github_dev"
 # permission can be added at job level or workflow level
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -11,13 +10,14 @@ permissions:
 jobs:
   GetCallerIdentity:
     runs-on: ubuntu-latest
+    environment: "development"
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v4
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
         with:
-          role-to-assume: ${{ env.ASSUME_ROLE_NAME }}
+          role-to-assume: ${{ env.ASSUME_ROLE_ARN }}
           role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
